@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arecanut Daily Market | Karnataka</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#f5f0e6;color:#222}
+.header{background:#1a5c2a;color:white;padding:18px 15px;text-align:center;position:sticky;top:0;z-index:10}
+.header h1{font-size:24px}.header p{font-size:13px;opacity:.9;margin-top:4px}
+.live{background:#ffcc00;color:#000;display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;margin-top:8px}
+.container{max-width:900px;margin:auto;padding:12px}
+.date-box,.card{background:white;border-radius:12px;padding:14px;box-shadow:0 2px 8px #0001;margin-bottom:12px}
+.date-box{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.card h2{font-size:17px;margin-bottom:10px;color:#1a5c2a;border-left:4px solid #ffcc00;padding-left:8px}
+.notice{font-size:13px;line-height:1.5;color:#664d03;background:#fff8db;padding:10px;border-radius:8px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{background:#1a5c2a;color:white;padding:10px 8px;text-align:left}td{padding:10px 8px;border-bottom:1px solid #eee}
+.up{color:green;font-weight:bold}.down{color:red;font-weight:bold}.badge{background:#e8f5e9;color:#1a5c2a;padding:3px 8px;border-radius:10px;font-size:11px}
+.btn{display:block;background:#25D366;color:white;text-align:center;padding:13px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;margin-top:12px}
+.mandi{display:flex;gap:8px;overflow:auto;padding-bottom:6px}.mandi button{white-space:nowrap;padding:8px 14px;border-radius:20px;border:1px solid #1a5c2a;background:white;cursor:pointer}.mandi button.active{background:#1a5c2a;color:white}
+.graph-buttons{display:flex;gap:8px;margin-top:10px}.graph-buttons button{flex:1;padding:8px;border-radius:8px;border:1px solid #1a5c2a;background:white;cursor:pointer}.graph-buttons button.active{background:#1a5c2a;color:white}
+.footer{text-align:center;font-size:12px;color:#888;padding:20px}
+@media(max-width:520px){table{font-size:12px}th,td{padding:8px 5px}.badge{display:none}.date-box{font-size:13px}.graph-buttons{flex-wrap:wrap}.graph-buttons button{min-width:40%}}
+</style>
+</head>
+<body>
+<div class="header"><h1>🌴 ARECANUT DAILY MARKET</h1><p>Tarikere • Shivamogga • Sagar • TUMCOS • CAMPCO</p><div class="live">INDICATIVE RATES · DEMO DATA</div></div>
+<div class="container">
+<div class="date-box"><div><b id="todayDate">Loading date…</b><br><span id="updateTime">Indicative sample rates</span></div><div style="text-align:right"><b style="color:#1a5c2a">Aavak: —</b><br><span>Verify with mandi</span></div></div>
+<p class="notice"><b>Note:</b> Prices, changes, arrivals, and news shown here are sample/demo content, not verified live market data. Confirm current rates with the relevant mandi before making trading decisions.</p>
+<div class="card"><h2>📍 Mandi Chuno</h2><div class="mandi" id="mandiBtns"><button class="active" onclick="changeMandi(this,'Tarikere')">Tarikere</button><button onclick="changeMandi(this,'Shivamogga')">Shivamogga</button><button onclick="changeMandi(this,'Sagar')">Sagar</button><button onclick="changeMandi(this,'TUMCOS')">TUMCOS</button><button onclick="changeMandi(this,'CAMPCO')">CAMPCO</button></div><p id="selectedMandi" style="font-size:13px;margin-top:8px">Selected: Tarikere</p></div>
+<div class="card"><h2>📊 Indicative Bhav - Per Kg / Per Quintal</h2><div style="overflow-x:auto"><table><thead><tr><th>Supari Type</th><th>Rate / Kg</th><th>Rate / Qtl</th><th>Kal Se</th></tr></thead><tbody id="rateTable"></tbody></table></div></div>
+<div class="card"><h2>📈 Sample 30-Day Graph - Rashi / Regina</h2><canvas id="myChart" height="120"></canvas><div class="graph-buttons" id="graphButtons"><button class="active" onclick="changeGraph('Rashi',this)">Rashi</button><button onclick="changeGraph('Regina',this)">Regina</button><button onclick="changeGraph('Bette',this)">Bette</button><button onclick="changeGraph('Chali',this)">Chali</button></div></div>
+<div class="card"><h2>📈 Sample 7-Day Graph - All Types</h2><canvas id="multiChart" height="130"></canvas></div>
+<div class="card"><h2>📰 Market News</h2><p style="font-size:14px;line-height:1.6">Demo content only. Replace this section with verified market updates before publishing.</p></div>
+<a class="btn" href="https://wa.me/919999999999?text=Hi%2C%20Arecanut%20Rate%20Chahiye" target="_blank" rel="noopener noreferrer">📲 WhatsApp Pe Rate Pao (replace demo number)</a>
+</div>
+<div class="footer">Arecanut Daily Market © 2026 • Demo page — market data is not live</div>
+<script>
+const allRates=[
+{name:'Regina',kg:512,diff:'+800',type:'up'},{name:'Nuli',kg:685,diff:'+1200',type:'up'},
+{name:'Hasa',kg:620,diff:'+500',type:'up'},{name:'Rashi',kg:485,diff:'+800',type:'up'},
+{name:'Bette',kg:432,diff:'-300',type:'down'},{name:'Gorabalu',kg:385,diff:'-200',type:'down'},
+{name:'Tumkos (Tumkur Gota)',kg:410,diff:'+100',type:'up'},{name:'Mankos (Mangalore Gota)',kg:445,diff:'+400',type:'up'},
+{name:'Chali',kg:380,diff:'+0',type:'up'},{name:'Moti Chali',kg:395,diff:'+200',type:'up'},
+{name:'Churu / Churi',kg:200,diff:'-100',type:'down'},{name:'Roasted Arecanut',kg:380,diff:'+600',type:'up'},
+{name:'Hasi Adike',kg:57,diff:'-2',type:'down'},{name:'Kempadike',kg:62,diff:'+1',type:'up'},
+{name:'Thirthahalli Gota',kg:540,diff:'+900',type:'up'},{name:'Sagar Gota',kg:495,diff:'+300',type:'up'}
+];
+function renderTable(){document.getElementById('rateTable').innerHTML=allRates.map(r=>`<tr><td><b>${r.name}</b> <span class="badge">Karnataka</span></td><td>₹${r.kg.toLocaleString('en-IN')}</td><td>₹${(r.kg*100).toLocaleString('en-IN')}</td><td class="${r.type}">${r.type==='up'?'▲':'▼'} ${r.diff}</td></tr>`).join('');}
+renderTable();
+const now=new Date();
+document.getElementById('todayDate').textContent='📅 '+now.toLocaleDateString('hi-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('updateTime').textContent='Page viewed: '+now.toLocaleTimeString('hi-IN',{hour:'2-digit',minute:'2-digit'})+' · Demo data';
+function changeMandi(btn,name){document.querySelectorAll('#mandiBtns button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('selectedMandi').textContent='Selected: '+name+' · Rates are sample data and do not vary by mandi.';}
+const graphData={
+Rashi:[462,465,470,468,472,475,480,478,482,485,483,486,488,485,490,492,488,495,490,492,488,485,482,485,488,490,485,488,490,485],
+Regina:[485,490,495,492,498,500,505,502,508,512,510,515,512,518,515,520,518,522,518,520,515,512,510,512,515,518,512,515,518,512],
+Bette:[410,415,420,418,425,428,430,432,428,435,432,430,428,432,435,438,432,430,428,432,435,438,432,430,428,432,435,438,432,432],
+Chali:[360,365,370,368,372,375,378,380,378,382,380,378,382,385,380,378,382,385,380,378,382,385,380,378,382,385,380,378,382,380]
+};
+const dates=Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(29-i));return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});});
+const chartColors={Rashi:'#1a5c2a',Regina:'#2878b5',Bette:'#e19b18',Chali:'#8a4b9b'};
+const myChart=new Chart(document.getElementById('myChart').getContext('2d'),{type:'line',data:{labels:dates,datasets:[{label:'Rashi Rate / Kg (sample)',data:graphData.Rashi,borderColor:chartColors.Rashi,backgroundColor:'#1a5c2a22',tension:.3,fill:true}]},options:{responsive:true,plugins:{legend:{display:true}},scales:{y:{beginAtZero:false}}}});
+function changeGraph(type,btn){myChart.data.datasets[0].label=type+' Rate / Kg (sample)';myChart.data.datasets[0].data=graphData[type];myChart.data.datasets[0].borderColor=chartColors[type];myChart.data.datasets[0].backgroundColor=chartColors[type]+'22';myChart.update();document.querySelectorAll('#graphButtons button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+const weekLabels=['6 days ago','5 days ago','4 days ago','3 days ago','2 days ago','Yesterday','Today'];
+const multiDatasets=Object.entries(graphData).map(([name,values])=>({label:name+' (sample)',data:values.slice(-7),borderColor:chartColors[name],tension:.3,fill:false}));
+new Chart(document.getElementById('multiChart').getContext('2d'),{type:'line',data:{labels:weekLabels,datasets:multiDatasets},options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:false}}}});
+</script>
+</body>
+</html>
